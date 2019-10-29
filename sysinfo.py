@@ -27,14 +27,35 @@ if platform.system() == "Linux":
             print(i + ":" + x)
 
 if platform.system() == "Windows":
-    import winreg
     import os
+    import wmi
 
     print("Processors info:")
-    #get windows HKEY object
-    key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"Hardware\Description\System\CentralProcessor\0")
-    prcname = winreg.QueryValueEx(key, "ProcessorNameString")[0]
-    cpu_count = os.cpu_count()
-    while cpu_count > 0:
-        print(prcname)
-        cpu_count -= 1
+    #connect to WMI local machine
+    winloc = wmi.WMI()
+    #show wmi class
+    # for classname in winloc.classes:
+    #     if "Processor" in classname:
+    #         print(classname)
+
+    #get processor info
+    w32processor = winloc.Win32_Processor()
+    for i in w32processor:
+        cpu_name = i.Name
+        cpu_count_core = i.NumberOfCores
+        print(cpu_name + "\n" + "CoreCount: " + str(cpu_count_core))
+        print(i)
+
+    #general system info
+    w32compsystem = winloc.Win32_ComputerSystem()
+    for i in w32compsystem:
+        print(i)
+
+    print("Memory info:")
+    w32phy_mem = winloc.Win32_PhysicalMemory()
+    for i in w32phy_mem:
+        mem_locate = i.DeviceLocator
+        capacity_mb = int(i.Capacity) // (1024 * 1024)
+        name = i.Name
+        manufac = i.Manufacturer
+        print(name + " " + manufac + " " + mem_locate + " Capacity: " + str(capacity_mb) + "MB")
