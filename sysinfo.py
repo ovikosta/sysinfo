@@ -26,3 +26,15 @@ if platform.system() == "Linux":
         if i in gchar_ram:
             print(i + ":" + x)
 
+if platform.system() == "Windows":
+    import winreg
+    import os
+
+    print("Processors info:")
+    #get windows HKEY object
+    key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"Hardware\Description\System\CentralProcessor\0")
+    prcname = winreg.QueryValueEx(key, "ProcessorNameString")[0]
+    cpu_count = os.cpu_count()
+    while cpu_count > 0:
+        print(prcname)
+        cpu_count -= 1
