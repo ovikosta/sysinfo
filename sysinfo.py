@@ -1,5 +1,6 @@
 #!/bin/env python3
 
+import sys
 import platform
 
 
@@ -70,3 +71,7 @@ if platform.system() == "Windows":
         disk_size_mb = int(i.Size) // (1024 * 1024)
         print(disk_desc + " " + disk_model + "\nDiskSize: " +
               str(disk_size_mb) + "MB" + "\nDiskPartitions: " + str(disk_part))
+
+
+if __name__ == "__main__":
+    
