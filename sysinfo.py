@@ -16,7 +16,7 @@ if platform.system() == "Linux":
     for index, item in enumerate(cpuinfo):
         print(str(index) + ":" + item)
 
-    # ger ram info from /proc/meminfo
+    # get ram info from /proc/meminfo
     print("\nMemory info:")
     gchar_ram = ["MemTotal", "MemFree", "MemAvailable"]
     with open("/proc/meminfo", "r") as f:

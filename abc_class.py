@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod, abstractproperty
 class AbstractBaseOS(ABC):
 
     # Get hostname
-    @abstractproperty
+    @abstractmethod
     def hostname(self):
         pass
 
