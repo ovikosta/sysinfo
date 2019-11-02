@@ -24,15 +24,15 @@ class WindowsOS(abc_class.AbstractBaseOS):
         if cpu_arg:
             if core_num:
                 # Realtime info for core
-                w32proc_rt = self.winloc.Win32_PerfFormattedData_PerfOS_Processor()
-                for i in w32proc_rt:
-                    if core_num == int(i.Name):
+                wql = "SELECT * FROM Win32_PerfFormattedData_PerfOS_Processor WHERE Name <> '_Total'"
+                for i in self.winloc.query(wql):
+                    if core_num == i.Name:
                         # Print core name, load and idle in precent for core.
                         core_name = i.Name
                         core_usage = i.PercentProcessorTime
                         core_idle = i.PercentIdleTime
                         print("Core: " + core_name + " PercentUsage: " +
-                              core_usage + "%" + " PercentIdle: " + core_idle + "%")
+                                    core_usage + "%" + " PercentIdle: " + core_idle + "%")
             else:
                 for cpu_number, i in enumerate(w32processor):
                     # Print processors name, count core, load in percentage and socket.
@@ -40,18 +40,15 @@ class WindowsOS(abc_class.AbstractBaseOS):
                     cpu_count_core = i.NumberOfCores
                     cpu_usage = i.LoadPercentage
                     cpu_socket = i.SocketDesignation
-                    print(cpu_name + "\nSocket: " + cpu_socket + "CpuNumber: " +
-                          str(cpu_number) + "\n" "CoreCount: " + str(cpu_count_core) + "\nPercentLoad: " + cpu_usage + "%")
-                    print("\nIf you show realtime info about processor \
-                            use time, add arguments number of the core.\
-                                For example '--cpu 1'")
+                    print(cpu_name + "\nSocket: " + cpu_socket + " CpuNumber: " +
+                          str(cpu_number) + "\n" "CoreCount: " + str(cpu_count_core) + "\nPercentLoad: " + str(cpu_usage) + "%")
+                print("\nIf you show realtime info about processor use time, add arguments number of the core. For example '--cpu 1'")
         else:
-            for cpu_number, i in w32processor:
+            for cpu_number, i in enumerate(w32processor):
                 # Print cpu count and name processors.
                 cpu_name = i.Name
-                print(str(cpu_number) + cpu_name)
-            print("\nYou can show more information about processors,\
-                    add arguments '--cpu'")
+                print(str(cpu_number) + " : " + cpu_name)
+            print("\nYou can show more information about processors, add arguments '--cpu'\n ----------------")
 
     def ram(self, ram_arg=None, ram_num=None):
         print("\nMemory info:")
@@ -61,7 +58,7 @@ class WindowsOS(abc_class.AbstractBaseOS):
             # If call with two arguments [--ram 1]
             if ram_num:
                 for ram_number, i in enumerate(w32phy_mem):
-                    if ram_num == ram_number:
+                    if int(ram_num) == ram_number:
                         # Print memory bank location, capacity, memory name, manufacturer,
                         # memory speed, serial number.
                         mem_locate = i.DeviceLocator
@@ -88,18 +85,19 @@ class WindowsOS(abc_class.AbstractBaseOS):
                 w32mem_rt = self.winloc.Win32_PerfFormattedData_PerfOS_Memory()
                 for mrtu in w32mem_rt:
                     # Print available memory, use memory in percent, use memory in MB.
-                    memavail_mb = mrtu.AvailbleMBytes
-                    memuse_per = mrtu.PercentCommittedBytesInUse
-                    memuse_mb = mem_total_mb - memavail_mb
+                    memavail_mb = mrtu.AvailableMBytes
+                    memuse_per = str(mrtu.PercentCommittedBytesInUse)
+                    memuse_mb = str(mem_total_mb - int(memavail_mb))
                     print("MemAvailMB: " + memavail_mb + "MB" + " : MemUseMB: " +
-                          memuse_mb + "MB" + " : MemUsePercent: " + memuse_per + "%")
+                          memuse_mb + "MB" + " : MemUsePercent: " + memuse_per + " %")
         else:
             for ram_number, i in enumerate(w32phy_mem):
                 # Print memory bank location and capacity.
                 mem_locate = i.DeviceLocator
                 mem_cap_mb = int(i.Capacity) // (1024 * 1024)
                 print(str(ram_number) + " : " +
-                      mem_locate + str(mem_cap_mb) + "MB")
+                      mem_locate + " " + str(mem_cap_mb) + "MB")
+            print("\nYou can show more information about ram, add arguments '--ram'\n ----------------")
 
     def disk(self, disk_arg=None, disk_num=None, part_num=None):
         print("\nDisk info:")
@@ -111,13 +109,13 @@ class WindowsOS(abc_class.AbstractBaseOS):
             if disk_num and part_num:
                 w32diskpart = self.winloc.Win32_DiskPartition()
                 for i in w32diskpart:
-                    if disk_num == i.DiskIndex and part_num == i.Index:
+                    if int(disk_num) == int(i.DiskIndex) and int(part_num) == int(i.Index):
                         # Print part name, partition id in system, size in MB.
                         part_name = i.Name
                         part_id = i.DeviceID
                         part_size_mb = int(i.Size) // (1024 * 1024)
                         print(part_name + "\n" + part_id + "\n" +
-                              "PartitionSize: " + part_size_mb + "MB")
+                              "PartitionSize: " + str(part_size_mb) + "MB")
             else:
                 for i in w32disk:
                     # Print disk number, description, model, serial number,
@@ -129,13 +127,14 @@ class WindowsOS(abc_class.AbstractBaseOS):
                     disk_number = i.Index
                     disk_sn = i.SerialNumber
                     print(str(disk_number) + " : " + disk_desc + " " + disk_model + "\nSerialNumber: " + disk_sn +
-                          "\nDiskSize: " + str(disk_size_mb) + "MB" + "\nDiskPartitions: " + str(disk_part))
+                          "\nDiskSize: " + str(disk_size_mb) + "MB" + "\nDiskPartitions: " + str(disk_part) + "\n")
         else:
             for i in w32disk:
                 # Print disk number and model.
                 disk_number = i.Index
                 disk_model = i.Model
                 print(str(disk_number) + " : Model: " + disk_model)
+            print("\nYou can show more information about disk, add arguments '--disk'\n ----------------")
 
 
 class LinuxOS(abc_class.AbstractBaseOS):
