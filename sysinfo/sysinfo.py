@@ -4,7 +4,7 @@ import sys
 import platform
 import argparse
 
-from os_class import WindowsOS
+from os_class import WindowsOS, LinuxOS
 
 # view list disk with size
 # info about cpu and ram with general characteristics
@@ -35,6 +35,8 @@ if __name__ == "__main__":
             windows.cpu()
             windows.ram()
             windows.disk()
+    elif platform.system() == "Linux":
+        pass
     # if platform.system() == "Linux":
     #     pass
 

@@ -31,7 +31,8 @@ class WindowsOS(abc_class.AbstractBaseOS):
                         core_name = i.Name
                         core_usage = i.PercentProcessorTime
                         core_idle = i.PercentIdleTime
-                        print("Core: {:s} PercentUsage: {:s}% PercentIdle: {:s}%".format(core_name, core_usage, core_idle))
+                        print("Core: {:s} PercentUsage: {:s}% PercentIdle: {:s}%".format(
+                            core_name, core_usage, core_idle))
                         break
                 else:
                     print("CoreNum {:d} does not exist!".format(core_num))
@@ -42,7 +43,8 @@ class WindowsOS(abc_class.AbstractBaseOS):
                     cpu_count_core = i.NumberOfCores
                     cpu_usage = i.LoadPercentage
                     cpu_socket = i.SocketDesignation
-                    print("{:s}\nSocket: {:s} CpuNumber: {:d}\nCoreCount: {:d}\nPercentLoad: {:d}%".format(cpu_name, cpu_socket, cpu_number, cpu_count_core, cpu_usage))
+                    print("{:s}\nSocket: {:s} CpuNumber: {:d}\nCoreCount: {:d}\nPercentLoad: {:d}%".format(
+                        cpu_name, cpu_socket, cpu_number, cpu_count_core, cpu_usage))
                 print("\nIf you show realtime info about processor use time, add arguments number of the core. For example '--cpu 1'")
         else:
             for cpu_number, i in enumerate(w32processor):
@@ -68,7 +70,8 @@ class WindowsOS(abc_class.AbstractBaseOS):
                         mem_manufac = i.Manufacturer
                         mem_speed = str(i.Speed)
                         mem_sn = i.SerialNumber
-                        print("{:d} : {:s} {:s} {:s} Capacity: {:d}MB\nMemorySpeed: {:s}\nMemorySerialNumber: {:s}".format(ram_number, mem_name, mem_manufac, mem_locate, mem_cap_mb, mem_speed, mem_sn))
+                        print("{:d} : {:s} {:s} {:s} Capacity: {:d}MB\nMemorySpeed: {:s}\nMemorySerialNumber: {:s}".format(
+                            ram_number, mem_name, mem_manufac, mem_locate, mem_cap_mb, mem_speed, mem_sn))
                         break
                 else:
                     print("RamNumber: {:d} does not exist!".format(ram_num))
@@ -81,7 +84,8 @@ class WindowsOS(abc_class.AbstractBaseOS):
                     mem_name = i.Name
                     mem_manufac = i.Manufacturer
                     mem_total_mb += mem_cap_mb
-                    print("{:d} : {:s} {:s} {:s} Capacity: {:d}MB".format(ram_number, mem_name, mem_manufac, mem_locate, mem_cap_mb))
+                    print("{:d} : {:s} {:s} {:s} Capacity: {:d}MB".format(
+                        ram_number, mem_name, mem_manufac, mem_locate, mem_cap_mb))
                     # Real time memory usage
                 w32mem_rt = self.winloc.Win32_PerfFormattedData_PerfOS_Memory()
                 for mrtu in w32mem_rt:
@@ -89,7 +93,8 @@ class WindowsOS(abc_class.AbstractBaseOS):
                     memavail_mb = mrtu.AvailableMBytes
                     memuse_per = str(mrtu.PercentCommittedBytesInUse)
                     memuse_mb = str(mem_total_mb - int(memavail_mb))
-                    print("MemAvailMB: {:s}MB : MemUseMB: {:s}MB : MemUsePercent: {:s}%".format(memavail_mb, memuse_mb, memuse_per))
+                    print("MemAvailMB: {:s}MB : MemUseMB: {:s}MB : MemUsePercent: {:s}%".format(
+                        memavail_mb, memuse_mb, memuse_per))
         else:
             for ram_number, i in enumerate(w32phy_mem):
                 # Print memory bank location and capacity.
@@ -129,7 +134,8 @@ class WindowsOS(abc_class.AbstractBaseOS):
                         disk_size_mb = int(i.Size) // (1024 * 1024)
                         disk_number = i.Index
                         disk_sn = i.SerialNumber
-                        print("{:d} : {:s} {:s}\nSerialNumber: {:s}\nDiskSize: {:d}MB\nDiskPartitions: {:d}\n".format(disk_number, disk_desc, disk_model, disk_sn, disk_size_mb, disk_part))
+                        print("{:d} : {:s} {:s}\nSerialNumber: {:s}\nDiskSize: {:d}MB\nDiskPartitions: {:d}\n".format(
+                            disk_number, disk_desc, disk_model, disk_sn, disk_size_mb, disk_part))
                         break
             else:
                 for i in w32disk:
@@ -141,7 +147,8 @@ class WindowsOS(abc_class.AbstractBaseOS):
                     disk_size_mb = int(i.Size) // (1024 * 1024)
                     disk_number = i.Index
                     disk_sn = i.SerialNumber
-                    print("{:d} : {:s} {:s}\nSerialNumber: {:s}\nDiskSize: {:d}MB\nDiskPartitions: {:d}\n".format(disk_number, disk_desc, disk_model, disk_sn, disk_size_mb, disk_part))
+                    print("{:d} : {:s} {:s}\nSerialNumber: {:s}\nDiskSize: {:d}MB\nDiskPartitions: {:d}\n".format(
+                        disk_number, disk_desc, disk_model, disk_sn, disk_size_mb, disk_part))
         else:
             for i in w32disk:
                 # Print disk number and model.
