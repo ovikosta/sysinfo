@@ -163,13 +163,13 @@ class LinuxOS(abc_class.AbstractBaseOS):
     def hostname(self):
         pass
 
-    def cpu(self):
+    def cpu(self, cpu_arg=None, core_num=None):
         pass
 
-    def ram(self):
+    def ram(self, ram_arg=None, ram_num=None):
         pass
 
-    def disk(self):
+    def disk(self, disk_arg=None, disk_num=None, part_num=None):
         pass
 
     # # get processors info from /proc/cpuinfo

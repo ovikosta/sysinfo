@@ -23,6 +23,7 @@ if __name__ == "__main__":
     namespace = parser.parse_args(sys.argv[1:])
 
     if platform.system() == "Windows":
+        # Call windows class from os_class.py
         windows = WindowsOS()
         windows.hostname()
         if namespace.cpu:
@@ -36,7 +37,19 @@ if __name__ == "__main__":
             windows.ram()
             windows.disk()
     elif platform.system() == "Linux":
-        pass
+        # Call linux class from os_class.py
+        linux = LinuxOS()
+        linux.hostname()
+        if namespace.cpu:
+            linux.cpu(cpu_arg=namespace.cpu, core_num=namespace.dev_num1)
+        elif namespace.ram:
+            linux.ram(ram_arg=namespace.ram, ram_num=namespace.dev_num1)
+        elif namespace.disk:
+            linux.disk(disk_arg=namespace.disk, disk_num=namespace.dev_num1, part_num=namespace.dev_num2)
+        else:
+            linux.cpu()
+            linux.ram()
+            linux.disk()
     # if platform.system() == "Linux":
     #     pass
 
