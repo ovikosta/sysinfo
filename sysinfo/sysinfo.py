@@ -11,7 +11,9 @@ from os_class import WindowsOS
 
 def create_arg_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument("device", nargs="?")
+    parser.add_argument("--cpu", action="store_true")
+    parser.add_argument("--ram", action="store_true")
+    parser.add_argument("--disk", action="store_true")
     parser.add_argument("dev_num1", nargs="?", type=int)
     parser.add_argument("dev_num2", nargs="?", type=int)
     return parser
@@ -22,10 +24,17 @@ if __name__ == "__main__":
 
     if platform.system() == "Windows":
         windows = WindowsOS()
-        if namespace.device == "--cpu":
-            windows.cpu(cpu_arg=namespace.device, core_num=namespace.dev_num1)
-        elif namespace.device:
-            pass
+        windows.hostname()
+        if namespace.cpu:
+            windows.cpu(cpu_arg=namespace.cpu, core_num=namespace.dev_num1)
+        elif namespace.ram:
+            windows.ram(ram_arg=namespace.ram, ram_num=namespace.dev_num1)
+        elif namespace.disk:
+            windows.disk(disk_arg=namespace.disk, disk_num=namespace.dev_num1, part_num=namespace.dev_num2)
+        else:
+            windows.cpu()
+            windows.ram()
+            windows.disk()
     # if platform.system() == "Linux":
     #     pass
 
