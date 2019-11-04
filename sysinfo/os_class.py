@@ -1,7 +1,9 @@
 import os
-import wmi
 
 import abc_class
+
+if os.uname() == "Windows":
+    import wmi
 
 
 class WindowsOS(abc_class.AbstractBaseOS):
@@ -160,11 +162,21 @@ class WindowsOS(abc_class.AbstractBaseOS):
 
 class LinuxOS(abc_class.AbstractBaseOS):
 
+
     def hostname(self):
-        pass
+        print(os.uname().nodename)
 
     def cpu(self, cpu_arg=None, core_num=None):
-        pass
+        # Get processors info from /proc/cpuinfo
+        print("Processors info:")
+        with open("/proc/cpuinfo", "r") as f:
+            cpu_file = f.readlines()
+        cpuinfo = [x.strip().split(":")[1] for x in cpu_file if "model name" in x]
+        cpu_model = cpuinfo[0]
+        core_count = len(cpuinfo)
+        print("{:s}\nCoreCount: {:d}".format(cpu_model, core_count))
+
+
 
     def ram(self, ram_arg=None, ram_num=None):
         pass
