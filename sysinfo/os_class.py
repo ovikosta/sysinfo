@@ -171,17 +171,27 @@ class LinuxOS(abc_class.AbstractBaseOS):
         print("Processors info:")
         with open("/proc/cpuinfo", "r") as f:
             cpu_file = f.readlines()
-        cpuinfo = [x.strip().split(":") for x in cpu_file if not x.isspace()]
-        cpuinfo = {x[0].strip():x[1] for x in cpuinfo}
-        # Check processors count from cpuinfo
-        for i in cpuinfo:
-            if "physical id\t" in i and i[1] != " 0":
-                #Create dict with value type list!!!
-                pass
+        cpuinfo_list = [x.strip().split(":") for x in cpu_file if not x.isspace()]
+        cpuinfo_dos = {x[0].strip():set() for x in cpuinfo_list}
+        # Add element to dict of set
+        for i in cpuinfo_list:
+            cpuinfo_dos[i[0].strip()].add(i[1].strip())
+        # Check in system with two processors!!!
+        if len(cpuinfo_dos["physical id"]) > 1:
+            for phy_id in cpuinfo_dos["physical id"]:
+                print("{:d} : ".format(phy_id), end="")
+                for cpu_model in cpuinfo_dos["model name"]:
+                    print(cpu_model,"\nCoreCount: {:d}".format(cpuinfo_dos["cpu cores"]))
+        else:
+            print("{:s} : {:s}\nCoreCount: {:s}".format(
+                cpuinfo_dos["physical id"].pop(), cpuinfo_dos["model name"].pop(),
+                cpuinfo_dos["cpu cores"].pop()))
+            print("\nYou can show more information about processors, add arguments '--cpu'\n ----------------")
 
-        print("{:s} : {:s}".format(cpuinfo["physical id"],cpuinfo["model name"]))
-        # core_count = len(cpuinfo)
-        # print("{:s}\nCoreCount: {:d}".format(cpu_model, core_count))
+
+        print("{:s}\nSocket: {:s} CpuNumber: {:d}\nCoreCount: {:d}\nPercentLoad: {:d}%".format(
+                        cpu_name, cpu_socket, cpu_number, cpu_count_core, cpu_usage))
+                print("\nIf you show realtime info about processor use time, add arguments number of the core. For example '--cpu 1'")
 
 
 
