@@ -171,10 +171,17 @@ class LinuxOS(abc_class.AbstractBaseOS):
         print("Processors info:")
         with open("/proc/cpuinfo", "r") as f:
             cpu_file = f.readlines()
-        cpuinfo = [x.strip().split(":")[1] for x in cpu_file if "model name" in x]
-        cpu_model = cpuinfo[0]
-        core_count = len(cpuinfo)
-        print("{:s}\nCoreCount: {:d}".format(cpu_model, core_count))
+        cpuinfo = [x.strip().split(":") for x in cpu_file if not x.isspace()]
+        cpuinfo = {x[0].strip():x[1] for x in cpuinfo}
+        # Check processors count from cpuinfo
+        for i in cpuinfo:
+            if "physical id\t" in i and i[1] != " 0":
+                #Create dict with value type list!!!
+                pass
+
+        print("{:s} : {:s}".format(cpuinfo["physical id"],cpuinfo["model name"]))
+        # core_count = len(cpuinfo)
+        # print("{:s}\nCoreCount: {:d}".format(cpu_model, core_count))
 
 
 
