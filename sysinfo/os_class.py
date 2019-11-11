@@ -176,18 +176,24 @@ class LinuxOS(abc_class.AbstractBaseOS):
         # Add element to dict of set
         for i in cpuinfo_list:
             cpuinfo_dos[i[0].strip()].add(i[1].strip())
-        # Check in system with two processors!!!
-        if len(cpuinfo_dos["physical id"]) > 1:
-            for phy_id in cpuinfo_dos["physical id"]:
-                if len(cpuinfo_dos["model name"]) > 1:
-                    cpu_model = cpuinfo_dos["model name"].pop()
-                elif len(cpuinfo_dos["model name"]) != 0:
-                    cpu_model = cpuinfo_dos["model name"].pop()
-                print("{:d} : {:s}\nCoreCount: {:d}".format(phy_id, cpu_model, int(cpuinfo_dos["cpu cores"])))
+        if cpu_arg:
+            if core_num:
+                # Get info if core number
+                pass
+            else:
+                # Get info if cpu argument without number of cores
+                pass
         else:
-            print("{:s} : {:s}\nCoreCount: {:s}".format(
-                cpuinfo_dos["physical id"].pop(), cpuinfo_dos["model name"].pop(),
-                cpuinfo_dos["cpu cores"].pop()))
+            # Check physical processors
+            if len(cpuinfo_dos["physical id"]) > 1:
+                for phy_id in cpuinfo_dos["physical id"]:
+                    if len(cpuinfo_dos["model name"]) > 1:
+                        cpu_model = cpuinfo_dos["model name"].pop()
+                    elif len(cpuinfo_dos["model name"]) != 0:
+                        cpu_model = cpuinfo_dos["model name"].pop()
+                    print("{:s} : {:s}".format(phy_id, cpu_model))
+            else:
+                print("{:s} : {:s}".format(cpuinfo_dos["physical id"].pop(), cpuinfo_dos["model name"].pop()))
             print("\nYou can show more information about processors, add arguments '--cpu'\n ----------------")
 
 
