@@ -179,9 +179,11 @@ class LinuxOS(abc_class.AbstractBaseOS):
         # Check in system with two processors!!!
         if len(cpuinfo_dos["physical id"]) > 1:
             for phy_id in cpuinfo_dos["physical id"]:
-                print("{:d} : ".format(phy_id), end="")
-                for cpu_model in cpuinfo_dos["model name"]:
-                    print(cpu_model,"\nCoreCount: {:d}".format(cpuinfo_dos["cpu cores"]))
+                if len(cpuinfo_dos["model name"]) > 1:
+                    cpu_model = cpuinfo_dos["model name"].pop()
+                elif len(cpuinfo_dos["model name"]) != 0:
+                    cpu_model = cpuinfo_dos["model name"].pop()
+                print("{:d} : {:s}\nCoreCount: {:d}".format(phy_id, cpu_model, int(cpuinfo_dos["cpu cores"])))
         else:
             print("{:s} : {:s}\nCoreCount: {:s}".format(
                 cpuinfo_dos["physical id"].pop(), cpuinfo_dos["model name"].pop(),
@@ -189,9 +191,9 @@ class LinuxOS(abc_class.AbstractBaseOS):
             print("\nYou can show more information about processors, add arguments '--cpu'\n ----------------")
 
 
-        print("{:s}\nSocket: {:s} CpuNumber: {:d}\nCoreCount: {:d}\nPercentLoad: {:d}%".format(
-                        cpu_name, cpu_socket, cpu_number, cpu_count_core, cpu_usage))
-                print("\nIf you show realtime info about processor use time, add arguments number of the core. For example '--cpu 1'")
+        # print("{:s}\nSocket: {:s} CpuNumber: {:d}\nCoreCount: {:d}\nPercentLoad: {:d}%".format(
+        #                 cpu_name, cpu_socket, cpu_number, cpu_count_core, cpu_usage))
+        #         print("\nIf you show realtime info about processor use time, add arguments number of the core. For example '--cpu 1'")
 
 
 
